@@ -1,20 +1,25 @@
 # Created by: Tio Dh
 # Created date: 26 Oct 2022
 
+# 1. Animasi
+# 2. Integrasi Animasi + Controll
+# 3. Collision antara animasi dengan objek lain
+
 from OpenGL.GL import * 
 from OpenGL.GLUT import * 
 from OpenGL.GLU import *
-from Entities import rectangle
+from Entities import ControlledObject, AnimatedObject
 from random import randrange
 
 w,h= 500,500
-obstacles = []
-for i in range(10):
-    x = randrange(0,500)
-    y = randrange(0,500)
-    obstacles.append(rectangle(x, x+10, y, y+10, (x, y, x), w, h))
+# obstacles = []
+# for i in range(10):
+#     x = randrange(0,500)
+#     y = randrange(0,500)
+#     obstacles.append(rectangle(x, x+10, y, y+10, (x, y, x), w, h))
 
-rec1 = rectangle(0,200,0,200, (255,0,0),w, h)
+rec1 = ControlledObject(0, 200, 0, 200, (255,0,0), w, h)
+bullet = AnimatedObject(0, 20, 0, 20, (255,255,0), w, h)
 # rec2 = rectangle(100,200,100,200)
 
 def iterate():
@@ -31,20 +36,18 @@ def showScreen():
     iterate()
     
     rec1.Render()
-    for i in obstacles:
-        i.Render()
+    bullet.Animate()
 
     glutSwapBuffers()
 
 def controller(key, x, y):
-    rec1.Speed(key)
+    rec1.SpeedAdjust(key)
     rec1.Controller(key)
+
+    bullet.Controller(key)
+
+
     
-    for i in obstacles:
-        i.Speed(key)
-        i.Controller(key)
-
-
 glutInit()
 glutInitDisplayMode(GLUT_RGBA) 
 glutInitWindowSize(500, 500) 
